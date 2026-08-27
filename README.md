@@ -1,8 +1,5 @@
 
 
-## Build & Run (.vscode/tasks.json)
+## Collection of C++ examples
 
-```
-Cmd + Shift + B
-```
-
+![Avatar](grpc/assets/how-to-cpp.png)
