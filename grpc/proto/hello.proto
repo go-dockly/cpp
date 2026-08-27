@@ -1,15 +1,17 @@
 syntax = "proto3";
+package greetings;
 
-message Point3{
-    float x = 1;
-    float y = 2;
-    float z = 3;
+service Greeter {
+    // send a greeting
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
-message Numeric{
-    float value = 1;
+// request message containing the username
+message HelloRequest {
+    string name = 1;
 }
 
-service ProcessingService {
-    rpc computeSum(Point3) returns (Numeric) {} 
+// response message containing the greeting
+message HelloReply {
+    string message = 1;
 }
