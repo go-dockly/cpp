@@ -7,5 +7,6 @@
 clang++ -std=c++17 -Wall -Wextra -pthread -o mem_example main.cpp
 ./mem_example
 Allocating size 12
+Freeing memory
 ```
 
