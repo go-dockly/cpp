@@ -1,6 +1,6 @@
 
 
-## Thread example
+## Smart pointer example
 
 ```sh
 ➜  ptr_smart git:(main) ✗ make run     

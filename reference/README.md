@@ -1,9 +1,9 @@
 
 
-## Thread example
+## Reference example
 
 ```sh
-➜  references git:(main) ✗ make run     
+➜  reference git:(main) ✗ make run     
 clang++ -std=c++17 -Wall -Wextra -pthread -o ref_example main.cpp
 ./ref_example
 5

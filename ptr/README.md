@@ -1,6 +1,6 @@
 
 
-## Thread example
+## Pointer example
 
 ```sh
 ➜  ptr git:(main) ✗ make run     

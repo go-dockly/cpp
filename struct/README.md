@@ -1,9 +1,9 @@
 
 
-## Thread example
+## Struct example
 
 ```sh
-➜  ptr git:(main) ✗ make run     
+➜  struct git:(main) ✗ make run     
 clang++ -std=c++17 -Wall -Wextra -pthread -o struct_example main.cpp
 ./struct_example
 x:15 y:25 speed:0

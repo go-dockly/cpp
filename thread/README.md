@@ -3,7 +3,7 @@
 ## Thread example
 
 ```sh
-➜  c++ make run
+➜ make run
 ./thread_example
 Started thread id 0x16d13f000
 Working...
