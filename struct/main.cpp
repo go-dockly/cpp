@@ -4,15 +4,16 @@
 // prefer structs if compat with C is needed 
 // or plain old data eg math.vec2 
 struct PlayerSruct {
-    int x, y;
-    int speed;
+    int x = 0;
+    int y = 0;
+    int Speed = 5;
 
     void Move(int xa, int ya) {
-        x += xa * speed;
-        y += ya * speed;
+        x += xa * Speed;
+        y += ya * Speed;
     }
     void Position() {
-        std::cout << "x:" << x << " y:" << y << std::endl;
+        std::cout << "x:" << x << " y:" << y << " speed:" << Speed << std::endl;
     }
 };
 
@@ -31,7 +32,8 @@ public:
 
 int main() {
     PlayerSruct player1;
-    player1.Move(3, 1);
+    player1.Move(3, 5);
+    player1.Speed = 0;
     player1.Position();
 
     PlayerClass player2;
