@@ -7,6 +7,9 @@ void* operator new(size_t size) {
     return malloc(size);
 }
 
+// many compilers require a flag for sized delete globally 
+// (eg -fsized-deallocation in GCC and Clang). 
+// Without flag std::default_delete defaults to ::operator delete(memory)
 void operator delete(void* memory, size_t size) noexcept {
     std::cout << "Freeing size " << size << std::endl;
     free(memory);
