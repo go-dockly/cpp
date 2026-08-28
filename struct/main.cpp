@@ -1,10 +1,8 @@
 #include <iostream>
 
-#define LOG(x) std::cout << x << std::endl;
-
 // public by default
 // prefer structs if compat with C is needed 
-// plain old data eg math.vec2 
+// or plain old data eg math.vec2 
 struct PlayerSruct {
     int x, y;
     int speed;
@@ -13,9 +11,13 @@ struct PlayerSruct {
         x += xa * speed;
         y += ya * speed;
     }
+    void Position() {
+        std::cout << "x:" << x << " y:" << y << std::endl;
+    }
 };
 
 // private by default
+// prefer if inheritance is needed
 class PlayerClass {
     int x, y;
     int speed;
@@ -30,6 +32,7 @@ public:
 int main() {
     PlayerSruct player1;
     player1.Move(3, 1);
+    player1.Position();
 
     PlayerClass player2;
     player2.Move(3, 1);
