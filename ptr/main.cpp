@@ -9,10 +9,12 @@ int main() {
     *ptr = 10; // deref ptr & assign value
     LOG(a);
 
-    char* buffer = new char[8]; // alloc 8 bytes of mem and return ptr for mem block
+    char* buffer = new char[8]; // alloc 8 bytes of mem and return ptr to mem block
     memset(buffer, 0, 8);
 
+    char** ptr = &buffer; // ptr to ptr (double ptr) set to mem address of buffer 
+
     delete[] buffer;
-    
+
     std::cin.get();
 }
