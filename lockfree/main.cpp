@@ -82,7 +82,6 @@ void diskReaderThread() {
 
 // Audio callback  (runs on high-prio audio thread)
 // Func must NEVER block or lock
-// ------------------------------------------------------------------
 void audioCallback(float* output, size_t numFrames) {
     // Snapshot params once per buffer (cheap atomic loads)
     const float A = params.attack.load(std::memory_order_relaxed);
@@ -122,7 +121,7 @@ void guiThread() {
 
     std::this_thread::sleep_for(1s);
 
-    std::cout << "[GUI] Changing envelope parameters...\n";
+    std::cout << "[GUI] Changing envelope params...\n";
     params.attack  = 0.005f;
     params.decay   = 0.800f;
     params.sustain = 0.450f;
@@ -138,9 +137,6 @@ void guiThread() {
     running = false;
 }
 
-// ------------------------------------------------------------------
-// main
-// ------------------------------------------------------------------
 int main() {
     std::cout << "Starting lock-free audio demo...\n";
     std::cout << " - Disk thread fills ring buffer\n";
@@ -155,8 +151,7 @@ int main() {
     audio.join();
     disk.join();
 
-    std::cout << "\nShutdown. Samples remaining in ring_buffer: "
-              << audioRing.size_approx() << '\n';
+    std::cout << "\nShutdown. Samples remaining in ring_buffer: " << audioRing.size_approx() << '\n';
 
     std::cin.get();
     return 0;
