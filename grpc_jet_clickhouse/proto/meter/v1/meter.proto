@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package meter.v1;
+
+option cc_enable_arenas = true;
+
+import "google/protobuf/timestamp.proto";
+
+// Real-time meter reading from an asset (eg solar/wind/storage battery/smart meter).
+message MeterReading {
+  string asset_id = 1;          // eg "NL-SOLAR-042"
+  string meter_id = 2;
+  double active_power_kw = 3;   // instantaneous power
+  double energy_kwh = 4;        // cumulative energy
+  google.protobuf.Timestamp timestamp = 5;
+  map<string, string> labels = 6; // location, type, etc
+}
