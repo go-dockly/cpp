@@ -1,21 +1,23 @@
 
 
 ## Hazard pointers
+for high-performance concurrent data structures without the overhead of reference counting on every access.
+This example demonstrates the concept of protecting a pointer and deferred reclamation (simplified single hazard pointer per thread, global scan, no thread-local storage optimisation)
 
 ### The Problem Hazard Pointers Solve
 
-In lock-free concurrent data structures (lock-free stacks, queues, lists, hash tables, etc.) a thread can read a pointer to a node, then another thread can unlink and free that node. The first thread now has a dangling pointer → **use-after-free**.
+In lock-free concurrent data structures (lock-free stack, queues, lists, hash tables, etc) a thread can read a pointer to a node then another thread can unlink and free that node. The first thread now has a dangling pointer → **use-after-free**.
 
 `std::shared_ptr` / reference counting solves this, but every access does atomic reference-count updates. Under high contention those atomics become a scalability bottleneck.
 
 Hazard pointers give **safe memory reclamation without per-access reference counting**.
 
-### How Hazard Pointers Work (core idea)
+### How hazard pointers work
 
-1. Each thread owns a small set of **hazard pointers** (usually 1–4).
-2. Before a thread dereferences a pointer `p`, it **publishes** `p` into one of its hazard pointers (an atomic store).
-3. When a thread wants to free a node, it does **not** free it immediately. It puts the node on a **retirement list**.
-4. Periodically (or when the retirement list grows) the thread **scans** all hazard pointers of all threads. Any node that still appears in a hazard pointer is kept; the others are safely deleted.
+1. Each thread owns a small set of **hazard pointers** (usually 1–4)
+2. Before a thread dereferences a pointer `p`, it **publishes** `p` into one of its hazard pointers (an atomic store)
+3. When a thread wants to free a node, it does **not** free it immediately. It puts the node on a **retirement list**
+4. Periodically (or when the retirement list grows) the thread **scans** all hazard pointers of all threads. Any node that still appears in a hazard pointer is kept; the others are safely deleted
 
 This guarantees that a node is never freed while another thread still has it in a hazard pointer.
 
@@ -31,16 +33,12 @@ This guarantees that a node is never freed while another thread still has it in 
 
 Trade-off: pay a small cost when **retiring** nodes (scanning), not on every read. For read-heavy structures this is usually a win.
 
-### Educational Example
-
-The code below is intentionally simplified for clarity (single hazard pointer per thread, global scan, no thread-local storage optimisation, etc.). It demonstrates the *concept* of protecting a pointer and deferred reclamation.
-
-### Key Take-aways from the Example
+### Key Take-aways from Example
 
 - `protect()` publishes the pointer **before** using it.
 - The CAS loop re-checks the pointer after publishing (hazard-pointer pattern).
 - Nodes are never deleted while they appear in any hazard pointer.
-- Reclamation is deferred and batched → the cost is paid on the write/retire path, not on each read.
+- Reclamation is deferred and batched so the cost is paid on the write/retire path, not on each read.
 
 ### When to Prefer Hazard Pointers over `shared_ptr`
 
@@ -50,8 +48,6 @@ The code below is intentionally simplified for clarity (single hazard pointer pe
 | Simple ownership, low contention, or single-threaded | `unique_ptr` / `shared_ptr` |
 | Need automatic lifetime management with cycles | `shared_ptr` + `weak_ptr` |
 | Read-mostly concurrent data | Hazard pointers (or RCU / epoch-based schemes) |
-
-Hazard pointers are one of the classic tools (alongside RCU and epoch-based reclamation) that let you build high-performance concurrent data structures without the overhead of reference counting on every access.
 
 ```sh
 ➜  ptr_smart git:(main) ✗ make run     
