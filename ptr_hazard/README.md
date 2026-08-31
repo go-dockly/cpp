@@ -4,6 +4,36 @@
 for high-performance concurrent data structures without the overhead of reference counting on every access.
 This example demonstrates the concept of protecting a pointer and deferred reclamation (simplified single hazard pointer per thread, global scan, no thread-local storage optimisation)
 
+
+```sh
+➜  ptr_hazard git:(main) ✗ make run     
+clang++ -std=c++17 -Wall -Wextra -pthread -o ptr_hazard_example main.cpp
+./ptr_hazard_example
+Created Entity 0
+Created Entity 1
+Entity value = 1
+Created Entity 2
+Entity value = 2
+Created Entity 3
+Created Entity 4
+Entity value = 4
+Created Entity 5
+Destroyed Entity 1
+Destroyed Entity 2
+Destroyed Entity 4
+Destroyed Entity 5
+Entity value = 0
+Created Entity 6
+Entity value = 6
+Created Entity 7
+Entity value = 7
+Entity value = 3
+Destroyed Entity 6
+Destroyed Entity 7
+Destroyed Entity 3
+Done.
+```
+
 ### The Problem Hazard Pointers Solve
 
 In lock-free concurrent data structures (lock-free stack, queues, lists, hash tables, etc) a thread can read a pointer to a node then another thread can unlink and free that node. The first thread now has a dangling pointer → **use-after-free**.
@@ -48,33 +78,3 @@ Trade-off: pay a small cost when **retiring** nodes (scanning), not on every rea
 | Simple ownership, low contention, or single-threaded | `unique_ptr` / `shared_ptr` |
 | Need automatic lifetime management with cycles | `shared_ptr` + `weak_ptr` |
 | Read-mostly concurrent data | Hazard pointers (or RCU / epoch-based schemes) |
-
-```sh
-➜  ptr_smart git:(main) ✗ make run     
-clang++ -std=c++17 -Wall -Wextra -pthread -o ptr_hazard_example main.cpp
-./ptr_hazard_example
-Created Entity 0
-Created Entity 1
-Entity value = 1
-Created Entity 2
-Entity value = 2
-Created Entity 3
-Created Entity 4
-Entity value = 4
-Created Entity 5
-Destroyed Entity 1
-Destroyed Entity 2
-Destroyed Entity 4
-Destroyed Entity 5
-Entity value = 0
-Created Entity 6
-Entity value = 6
-Created Entity 7
-Entity value = 7
-Entity value = 3
-Destroyed Entity 6
-Destroyed Entity 7
-Destroyed Entity 3
-Done.
-```
-
