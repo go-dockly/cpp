@@ -38,6 +38,9 @@
 *.out
 *.app
 
+Third-party libs
+*.onnx
+
 # Build directories
 build/
 Build/
