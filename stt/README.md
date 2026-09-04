@@ -5,6 +5,8 @@ emitting an empty line when silence is detected.
 
 `mic > portaudio callback > audio queue > sherpa onnx recognizer > partial transcript`
 
+![demo](demo.png)
+
 ## Prerequisites
 
 ```bash
